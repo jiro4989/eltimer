@@ -19,13 +19,15 @@
 ;;
 ;;; Code:
 
-;; References:
-;; - [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Mode-Line-Variables.html][Mode Line Variables (GNU Emacs Lisp Reference Manual)]]
-;; - [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Functions.html#index-defun][Defining Functions (GNU Emacs Lisp Reference Manual)]]
-;; - [[https://ayatakesi.github.io/emacs/24.5/elisp_html/Backquote.html][Backquote (GNU Emacs Lisp Reference Manual)]]
-;; - [[https://w.atwiki.jp/elisp/pages/17.html][日付と時刻 - 逆引きEmacs Lisp]]
+; References:
+; - [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Mode-Line-Variables.html][Mode Line Variables (GNU Emacs Lisp Reference Manual)]]
+; - [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Functions.html#index-defun][Defining Functions (GNU Emacs Lisp Reference Manual)]]
+; - [[https://ayatakesi.github.io/emacs/24.5/elisp_html/Backquote.html][Backquote (GNU Emacs Lisp Reference Manual)]]
+; - [[https://w.atwiki.jp/elisp/pages/17.html][日付と時刻 - 逆引きEmacs Lisp]]
 
-(defvar eltimer-timer-string " test")
+(defvar eltimer-timer-string " [00:00:00]")
+(defvar eltimer-timer-object nil)
+(defvar eltimer-timer-goal-unix-time 0)
 
 (defun eltimer-number-to-time-format (n)
   "Format N seconds to time format (hh:mm:ss)."
@@ -34,7 +36,7 @@
           (/ (% n 3600) 60)
           (% (% n 3600) 60)))
 
-(defun eltimer-current-time-seconds ()
+(defun eltimer-current-unix-time ()
   "Return current unix time seconds."
   (string-to-number (format-time-string "%s")))
 
@@ -53,10 +55,38 @@
      (* (plist-get time :minute) 60)
      (plist-get time :second)))
 
-; TODO: ミニバッファからテキストを受けとる。
-; TODO: タイマーでモードラインを自動更新する
+(defun eltimer-prompt ()
+  "Open a prompt and read user input."
+  (read-string "Enter timer (ex: 1h, 2m, 3s): "))
 
-; (add-to-list 'global-mode-string 'eltimer-timer-string t)
+(defun eltimer-timer-update ()
+  "Update timer."
+  (let ((duration-time (- eltimer-timer-goal-unix-time (eltimer-current-unix-time))))
+    (if (<= (eltimer-time-to-seconds duration-time) 0)
+        (progn
+          (cancel-timer eltimer-timer-object)
+          (message "Time up!")
+          (beep))
+      (setq eltimer-timer-string
+            (format " [%02d:%02d:%02d]"
+                    (plist-get duration-time :hour)
+                    (plist-get duration-time :minute)
+                    (plist-get duration-time :second))))
+    (force-mode-line-update t)))
+
+(defun eltimer-set-mode-line ()
+  "Set a timer variables to mode line."
+  (add-to-list 'global-mode-string 'eltimer-timer-string t))
+
+(defun eltimer-timer-start ()
+  "Start eltimer."
+  (interactive)
+  (eltimer-set-mode-line)
+  (setq eltimer-timer-goal-unix-time
+        (+ (eltimer-current-unix-time)
+           (eltimer-time-to-seconds (eltimer-parse-string (eltimer-prompt)))))
+  (setq eltimer-timer-object
+        (run-at-time 0 1 #'eltimer-timer-update)))
 
 (provide 'eltimer)
 ;;; eltimer.el ends here
