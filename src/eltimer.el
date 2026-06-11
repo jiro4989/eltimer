@@ -21,11 +21,11 @@
 ;;
 ;;; Code:
 
-; References:
-; - [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Mode-Line-Variables.html][Mode Line Variables (GNU Emacs Lisp Reference Manual)]]
-; - [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Functions.html#index-defun][Defining Functions (GNU Emacs Lisp Reference Manual)]]
-; - [[https://ayatakesi.github.io/emacs/24.5/elisp_html/Backquote.html][Backquote (GNU Emacs Lisp Reference Manual)]]
-; - [[https://w.atwiki.jp/elisp/pages/17.html][日付と時刻 - 逆引きEmacs Lisp]]
+;; References:
+;; - [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Mode-Line-Variables.html][Mode Line Variables (GNU Emacs Lisp Reference Manual)]]
+;; - [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Functions.html#index-defun][Defining Functions (GNU Emacs Lisp Reference Manual)]]
+;; - [[https://ayatakesi.github.io/emacs/24.5/elisp_html/Backquote.html][Backquote (GNU Emacs Lisp Reference Manual)]]
+;; - [[https://w.atwiki.jp/elisp/pages/17.html][日付と時刻 - 逆引きEmacs Lisp]]
 
 (defvar eltimer-timer-string " [00:00:00]")
 (defvar eltimer-timer-object nil)
@@ -88,7 +88,7 @@
   (setq eltimer-timer-goal-unix-time
         (+ (eltimer-current-unix-time)
            (eltimer-time-to-seconds (eltimer-parse-string (eltimer-prompt)))))
-  ; タイマーが二重起動しないようにキャンセルする
+  ;; タイマーが二重起動しないようにキャンセルする
   (when eltimer-timer-object
     (cancel-timer eltimer-timer-object))
   (setq eltimer-timer-object
