@@ -86,8 +86,8 @@
   (interactive)
   (eltimer-set-mode-line)
   (setq eltimer-timer-goal-unix-time
-        (+ (eltimer-current-unix-time)
-           (eltimer-time-to-seconds (eltimer-parse-string (eltimer-prompt)))))
+        (+ (eltimer-time-to-seconds (eltimer-parse-string (eltimer-prompt)))
+           (eltimer-current-unix-time)))
   ;; タイマーが二重起動しないようにキャンセルする
   (when eltimer-timer-object
     (cancel-timer eltimer-timer-object))
