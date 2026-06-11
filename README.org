@@ -18,3 +18,4 @@ When the time is up, it will beep and shut down.
 ** Usage
 
 Call =eltimer-timer-start=.
+If you want to stop the timer, call =eltimer-timer-stop=.
