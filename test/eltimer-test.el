@@ -35,6 +35,9 @@
 (ert-deftest eltimer-test-eltimer-parse-string-123 ()
   (should (equal '(:hour 1 :minute 2 :second 3) (eltimer-parse-string "1h 2m 3s"))))
 
+(ert-deftest eltimer-test-eltimer-parse-string-123-no-space ()
+  (should (equal '(:hour 1 :minute 2 :second 3) (eltimer-parse-string "1h2m3s"))))
+
 (ert-deftest eltimer-test-eltimer-parse-string-hours ()
   (should (equal '(:hour 1 :minute 0 :second 0) (eltimer-parse-string "1 hours"))))
 
