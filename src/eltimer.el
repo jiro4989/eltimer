@@ -78,6 +78,7 @@
   "Set a timer variables to mode line."
   (add-to-list 'global-mode-string 'eltimer-timer-string t))
 
+;;;###autoload
 (defun eltimer-timer-start ()
   "Start eltimer."
   (interactive)
