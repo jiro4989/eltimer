@@ -88,6 +88,9 @@
   (setq eltimer-timer-goal-unix-time
         (+ (eltimer-current-unix-time)
            (eltimer-time-to-seconds (eltimer-parse-string (eltimer-prompt)))))
+  ; タイマーが二重起動しないようにキャンセルする
+  (when eltimer-timer-object
+    (cancel-timer eltimer-timer-object))
   (setq eltimer-timer-object
         (run-at-time 0 1 #'eltimer-timer-update)))
 
