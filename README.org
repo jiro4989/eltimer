@@ -17,5 +17,5 @@ When the time is up, it will beep and shut down.
 
 ** Usage
 
-Call =eltimer-timer-start=.
+Call =eltimer-timer-start= and enter a duration (e.g. =1h=, =2m=, =3s=).
 If you want to stop the timer, call =eltimer-timer-stop=.
