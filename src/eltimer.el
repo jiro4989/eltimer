@@ -42,12 +42,12 @@
 
 (defun eltimer-parse-string (str)
   "Parse a STR and return a time data."
-  `(:hour ,(when (string-match "\\([0-9]+\\)\s*h\\(ours\\)?" str)
-             (string-to-number (match-string 0 str)))
-    :minute ,(when (string-match "\\([0-9]+\\)\s*m\\(inutes\\)?" str)
-               (string-to-number (match-string 0 str)))
-    :second ,(when (string-match "\\([0-9]+\\)\s*s\\(conds\\)?" str)
-               (string-to-number (match-string 0 str)))))
+  `(:hour ,(or (when (string-match "\\([0-9]+\\)\s*h\\(ours\\)?" str)
+                 (string-to-number (match-string 0 str))) 0)
+    :minute ,(or (when (string-match "\\([0-9]+\\)\s*m\\(inutes\\)?" str)
+                   (string-to-number (match-string 0 str))) 0)
+    :second ,(or (when (string-match "\\([0-9]+\\)\s*s\\(conds\\)?" str)
+                   (string-to-number (match-string 0 str))) 0)))
 
 (defun eltimer-time-to-seconds (time)
   "Convert TIME to seconds."
@@ -61,17 +61,14 @@
 
 (defun eltimer-timer-update ()
   "Update timer."
-  (let ((duration-time (- eltimer-timer-goal-unix-time (eltimer-current-unix-time))))
-    (if (<= (eltimer-time-to-seconds duration-time) 0)
+  (let ((duration-seconds (- eltimer-timer-goal-unix-time (eltimer-current-unix-time))))
+    (if (<= duration-seconds 0)
         (progn
           (cancel-timer eltimer-timer-object)
           (message "Time up!")
           (beep))
       (setq eltimer-timer-string
-            (format " [%02d:%02d:%02d]"
-                    (plist-get duration-time :hour)
-                    (plist-get duration-time :minute)
-                    (plist-get duration-time :second))))
+            (format " [%s]" (eltimer-number-to-time-format duration-seconds))))
     (force-mode-line-update t)))
 
 (defun eltimer-set-mode-line ()
