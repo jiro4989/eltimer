@@ -87,8 +87,8 @@
 (defun eltimer-timer-stop ()
   "Stop eltimer."
   (interactive)
-  ;; 目標時間を過去にすることで、run-at-time で定期的に呼びだされている
-  ;; eltimer-timer-update が即座に終了処理に移る
+  ;; 目標時間を過去にすることで、run-at-time で定期的に呼び出されている
+  ;; eltimer-timer-update が次回呼び出し時に終了処理に移る
   (setq eltimer-timer-goal-unix-time 0))
 
 ;;;###autoload
