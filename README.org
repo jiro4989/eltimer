@@ -1,6 +1,6 @@
 * eltimer
 
-[[file:docs/demo.gif][eltimer demo animation]]
+[[file:docs/demo.gif]]
 
 eltimer is a simple timer that operates on the mode line.
 Entering strings like 1h, 2m, or 3s will display the time on the mode line.
