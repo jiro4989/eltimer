@@ -6,7 +6,7 @@
 ;; Maintainer: jiro4989 <jiro4989@jiro4989>
 ;; Created: June 10, 2026
 ;; Modified: June 10, 2026
-;; Version: 0.1.0
+;; Version: 0.1.1
 ;; Keywords: tools
 ;; Homepage: https://github.com/jiro4989/eltimer
 ;; Package-Requires: ((emacs "24.3"))
