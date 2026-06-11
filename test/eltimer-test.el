@@ -50,6 +50,9 @@
 (ert-deftest eltimer-test-eltimer-parse-string-0 ()
   (should (equal '(:hour 0 :minute 0 :second 0) (eltimer-parse-string ""))))
 
+(ert-deftest eltimer-test-eltimer-parse-string-invalid ()
+  (should (equal '(:hour 0 :minute 0 :second 0) (eltimer-parse-string "abcd"))))
+
 (ert-deftest eltimer-test-eltimer-time-to-seconds-123 ()
   (should (= 3723 (eltimer-time-to-seconds '(:hour 1 :minute 2 :second 3)))))
 
