@@ -87,13 +87,13 @@
 (defun eltimer-timer-start ()
   "Start eltimer."
   (interactive)
+  ;; タイマーが二重起動しないようにキャンセルする
+  (when eltimer-timer-object
+    (cancel-timer eltimer-timer-object))
   (eltimer-set-mode-line)
   (setq eltimer-timer-goal-unix-time
         (+ (eltimer-time-to-seconds (eltimer-parse-string (eltimer-prompt)))
            (eltimer-current-unix-time)))
-  ;; タイマーが二重起動しないようにキャンセルする
-  (when eltimer-timer-object
-    (cancel-timer eltimer-timer-object))
   (setq eltimer-timer-object
         (run-at-time 0 1 #'eltimer-timer-update)))
 
