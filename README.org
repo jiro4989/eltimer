@@ -1,5 +1,7 @@
 * eltimer
 
+[[file:docs/demo.gif][eltimer demo animation]]
+
 eltimer is a simple timer that operates on the mode line.
 Entering strings like 1h, 2m, or 3s will display the time on the mode line.
 When the time is up, it will beep and shut down.
