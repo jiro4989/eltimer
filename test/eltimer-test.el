@@ -41,11 +41,20 @@
 (ert-deftest eltimer-test-eltimer-parse-string-hours ()
   (should (equal '(:hour 1 :minute 0 :second 0) (eltimer-parse-string "1 hours"))))
 
+(ert-deftest eltimer-test-eltimer-parse-string-short-hours ()
+  (should (equal '(:hour 10 :minute 0 :second 0) (eltimer-parse-string "10h"))))
+
 (ert-deftest eltimer-test-eltimer-parse-string-minutes ()
   (should (equal '(:hour 0 :minute 2 :second 0) (eltimer-parse-string "2 minutes"))))
 
+(ert-deftest eltimer-test-eltimer-parse-string-short-minutes ()
+  (should (equal '(:hour 0 :minute 20 :second 0) (eltimer-parse-string "20m"))))
+
 (ert-deftest eltimer-test-eltimer-parse-string-seconds ()
   (should (equal '(:hour 0 :minute 0 :second 33) (eltimer-parse-string "33 seconds"))))
+
+(ert-deftest eltimer-test-eltimer-parse-string-short-seconds ()
+  (should (equal '(:hour 0 :minute 0 :second 30) (eltimer-parse-string "30s"))))
 
 (ert-deftest eltimer-test-eltimer-parse-string-0 ()
   (should (equal '(:hour 0 :minute 0 :second 0) (eltimer-parse-string ""))))
