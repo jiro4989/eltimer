@@ -84,6 +84,14 @@
   (add-to-list 'global-mode-string 'eltimer-timer-string t))
 
 ;;;###autoload
+(defun eltimer-timer-stop ()
+  "Stop eltimer."
+  (interactive)
+  ;; 目標時間を過去にすることで、run-at-time で定期的に呼びだされている
+  ;; eltimer-timer-update が即座に終了処理に移る
+  (setq eltimer-timer-goal-unix-time 0))
+
+;;;###autoload
 (defun eltimer-timer-start ()
   "Start eltimer."
   (interactive)
