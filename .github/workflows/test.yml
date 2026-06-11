@@ -1,0 +1,28 @@
+---
+
+name: test
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - README*
+      - LICENSE
+  pull_request:
+    paths-ignore:
+      - README*
+      - LICENSE
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Install Nix
+      uses: determinateSystems/nix-installer-action@v22
+
+    - name: Run Tests
+      run: nix develop -c make test
