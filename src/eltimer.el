@@ -6,8 +6,8 @@
 ;; Maintainer: jiro4989 <jiro4989@jiro4989>
 ;; Created: June 10, 2026
 ;; Modified: June 10, 2026
-;; Version: 0.0.1
-;; Keywords: abbrev bib c calendar comm convenience data docs emulations extensions faces files frames games hardware help hypermedia i18n internal languages lisp local maint mail matching mouse multimedia news outlines processes terminals tex text tools unix vc wp
+;; Version: 0.1.0
+;; Keywords: tools
 ;; Homepage: https://github.com/jiro4989/eltimer
 ;; Package-Requires: ((emacs "24.3"))
 ;;
@@ -15,7 +15,9 @@
 ;;
 ;;; Commentary:
 ;;
-;; Test.
+;; eltimer is a simple timer that operates on the mode line.
+;; Entering strings like 1h, 2m, or 3s will display the time on the mode line.
+;; When the time is up, it will beep and shut down.
 ;;
 ;;; Code:
 
@@ -60,12 +62,13 @@
   (read-string "Enter timer (ex: 1h, 2m, 3s): "))
 
 (defun eltimer-timer-update ()
-  "Update timer."
+  "Update a mode line timer."
   (let ((duration-seconds (- eltimer-timer-goal-unix-time (eltimer-current-unix-time))))
     (if (<= duration-seconds 0)
         (progn
           (cancel-timer eltimer-timer-object)
           (message "Time up!")
+          (setq eltimer-timer-string "")
           (beep))
       (setq eltimer-timer-string
             (format " [%s]" (eltimer-number-to-time-format duration-seconds))))
