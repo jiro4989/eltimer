@@ -59,5 +59,17 @@
 (ert-deftest eltimer-test-eltimer-time-to-seconds-second ()
   (should (= 3 (eltimer-time-to-seconds '(:hour 0 :minute 0 :second 3)))))
 
+(ert-deftest eltimer-test-eltimer-get-number-with-regex-number ()
+  (should (= 3 (eltimer-get-number-with-regex "\\([0-9]+\\)" "hello 3 world"))))
+
+(ert-deftest eltimer-test-eltimer-get-number-with-regex-hours ()
+  (should (= 1 (eltimer-get-number-with-regex "\\([0-9]+\\)[ \t]*h\\(ours\\)?" " 1 hours"))))
+
+(ert-deftest eltimer-test-eltimer-get-number-with-regex-hours2 ()
+  (should (= 2 (eltimer-get-number-with-regex "\\([0-9]+\\)[ \t]*h\\(ours\\)?" "2h"))))
+
+(ert-deftest eltimer-test-eltimer-get-number-with-regex-hours3 ()
+  (should (= 3 (eltimer-get-number-with-regex "\\([0-9]+\\)[ \t]*h\\(ours\\)?" "3\th"))))
+
 (provide 'eltimer-test)
 ;;; eltimer-test.el ends here

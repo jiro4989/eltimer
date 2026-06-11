@@ -42,14 +42,16 @@
   "Return current unix time seconds."
   (string-to-number (format-time-string "%s")))
 
+(defun eltimer-get-number-with-regex (re str)
+  "Get number from STR with RE."
+  (when (string-match re str)
+    (string-to-number (match-string 1 str))))
+
 (defun eltimer-parse-string (str)
   "Parse a STR and return a time data."
-  `(:hour ,(or (when (string-match "\\([0-9]+\\)\s*h\\(ours\\)?" str)
-                 (string-to-number (match-string 0 str))) 0)
-    :minute ,(or (when (string-match "\\([0-9]+\\)\s*m\\(inutes\\)?" str)
-                   (string-to-number (match-string 0 str))) 0)
-    :second ,(or (when (string-match "\\([0-9]+\\)\s*s\\(conds\\)?" str)
-                   (string-to-number (match-string 0 str))) 0)))
+  `(:hour ,(or (eltimer-get-number-with-regex "\\([0-9]+\\)[ \t]*h\\(ours\\)?" str) 0)
+    :minute ,(or (eltimer-get-number-with-regex "\\([0-9]+\\)[ \t]*m\\(inutes\\)?" str) 0)
+    :second ,(or (eltimer-get-number-with-regex "\\([0-9]+\\)[ \t]*s\\(conds\\)?" str) 0)))
 
 (defun eltimer-time-to-seconds (time)
   "Convert TIME to seconds."
