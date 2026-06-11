@@ -87,7 +87,10 @@
   (should (= 3 (eltimer-get-number-with-regex "\\([0-9]+\\)[ \t]*h\\(ours\\)?" "3\th"))))
 
 (ert-deftest eltimer-test-eltimer-timer-stop ()
-  (should (= 0 (eltimer-timer-stop))))
+  (let ((eltimer-timer-goal-unix-time 999999))
+    (should (= 999999 eltimer-timer-goal-unix-time))
+    (eltimer-timer-stop)
+    (should (= 0 eltimer-timer-goal-unix-time))))
 
 (provide 'eltimer-test)
 ;;; eltimer-test.el ends here
