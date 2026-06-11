@@ -70,7 +70,7 @@
         (progn
           (cancel-timer eltimer-timer-object)
           (message "Time up!")
-          (setq eltimer-timer-string "")
+          (setq global-mode-string (remove 'eltimer-timer-string global-mode-string))
           (beep))
       (setq eltimer-timer-string
             (format " [%s]" (eltimer-number-to-time-format duration-seconds))))
