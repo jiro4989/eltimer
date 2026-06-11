@@ -27,7 +27,7 @@
 ;; - [[https://ayatakesi.github.io/emacs/24.5/elisp_html/Backquote.html][Backquote (GNU Emacs Lisp Reference Manual)]]
 ;; - [[https://w.atwiki.jp/elisp/pages/17.html][日付と時刻 - 逆引きEmacs Lisp]]
 
-(defvar eltimer-timer-string " [00:00:00]")
+(defvar eltimer-timer-string "")
 (defvar eltimer-timer-object nil)
 (defvar eltimer-timer-goal-unix-time 0)
 
@@ -70,6 +70,8 @@
         (progn
           (cancel-timer eltimer-timer-object)
           (message "Time up!")
+          ;; タイマーを再実行したときに、前回の実行結果が表示されると気になるので空にしておく
+          (setq eltimer-timer-string "")
           (setq global-mode-string (remove 'eltimer-timer-string global-mode-string))
           (beep))
       (setq eltimer-timer-string
