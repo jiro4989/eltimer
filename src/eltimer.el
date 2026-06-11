@@ -85,7 +85,8 @@
 
 ;;;###autoload
 (defun eltimer-timer-stop ()
-  "Stop eltimer."
+  "Stop the running timer.
+Cleanup happens on the next timer tick (within 1 second)."
   (interactive)
   ;; 目標時間を過去にすることで、run-at-time で定期的に呼び出されている
   ;; eltimer-timer-update が次回呼び出し時に終了処理に移る
