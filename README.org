@@ -8,7 +8,9 @@ When the time is up, it will beep and shut down.
 
 #+BEGIN_SRC emacs-lisp
 (package! eltimer
-  :recipe (:host github :repo "jiro4989/eltimer"))
+  :recipe (:host github
+           :repo "jiro4989/eltimer"
+           :files ("src/*.el")))
 #+END_SRC
 
 ** Usage
