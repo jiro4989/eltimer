@@ -69,6 +69,7 @@
     (if (<= duration-seconds 0)
         (progn
           (cancel-timer eltimer-timer-object)
+          (setq eltimer-timer-object nil)
           (message "Time up!")
           ;; タイマーを再実行したときに、前回の実行結果が表示されると気になるので空にしておく
           (setq eltimer-timer-string "")
