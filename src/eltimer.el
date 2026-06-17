@@ -27,61 +27,61 @@
 ;; - [[https://ayatakesi.github.io/emacs/24.5/elisp_html/Backquote.html][Backquote (GNU Emacs Lisp Reference Manual)]]
 ;; - [[https://w.atwiki.jp/elisp/pages/17.html][日付と時刻 - 逆引きEmacs Lisp]]
 
-(defvar eltimer-timer-string "")
-(defvar eltimer-timer-object nil)
-(defvar eltimer-timer-goal-unix-time 0)
+(defvar eltimer--timer-string "")
+(defvar eltimer--timer-object nil)
+(defvar eltimer--timer-goal-unix-time 0)
 
-(defun eltimer-number-to-time-format (n)
+(defun eltimer--number-to-time-format (n)
   "Format N seconds to time format (hh:mm:ss)."
   (format "%02d:%02d:%02d"
           (/ n 3600)
           (/ (% n 3600) 60)
           (% (% n 3600) 60)))
 
-(defun eltimer-current-unix-time ()
+(defun eltimer--current-unix-time ()
   "Return current unix time seconds."
   (string-to-number (format-time-string "%s")))
 
-(defun eltimer-get-number-with-regex (re str)
+(defun eltimer--get-number-with-regex (re str)
   "Get number from STR with RE."
   (when (string-match re str)
     (string-to-number (match-string 1 str))))
 
-(defun eltimer-parse-string (str)
+(defun eltimer--parse-string (str)
   "Parse a STR and return a time data."
-  `(:hour ,(or (eltimer-get-number-with-regex "\\([0-9]+\\)[ \t]*h\\(ours\\)?" str) 0)
-    :minute ,(or (eltimer-get-number-with-regex "\\([0-9]+\\)[ \t]*m\\(inutes\\)?" str) 0)
-    :second ,(or (eltimer-get-number-with-regex "\\([0-9]+\\)[ \t]*s\\(conds\\)?" str) 0)))
+  `(:hour ,(or (eltimer--get-number-with-regex "\\([0-9]+\\)[ \t]*h\\(ours\\)?" str) 0)
+    :minute ,(or (eltimer--get-number-with-regex "\\([0-9]+\\)[ \t]*m\\(inutes\\)?" str) 0)
+    :second ,(or (eltimer--get-number-with-regex "\\([0-9]+\\)[ \t]*s\\(conds\\)?" str) 0)))
 
-(defun eltimer-time-to-seconds (time)
+(defun eltimer--time-to-seconds (time)
   "Convert TIME to seconds."
   (+ (* (plist-get time :hour) 3600)
      (* (plist-get time :minute) 60)
      (plist-get time :second)))
 
-(defun eltimer-prompt ()
+(defun eltimer--prompt ()
   "Open a prompt and read user input."
   (read-string "Enter timer (ex: 1h, 2m, 3s): "))
 
-(defun eltimer-timer-update ()
+(defun eltimer--timer-update ()
   "Update a mode line timer."
-  (let ((duration-seconds (- eltimer-timer-goal-unix-time (eltimer-current-unix-time))))
+  (let ((duration-seconds (- eltimer--timer-goal-unix-time (eltimer--current-unix-time))))
     (if (<= duration-seconds 0)
         (progn
-          (cancel-timer eltimer-timer-object)
-          (setq eltimer-timer-object nil)
+          (cancel-timer eltimer--timer-object)
+          (setq eltimer--timer-object nil)
           (message "Time up!")
           ;; タイマーを再実行したときに、前回の実行結果が表示されると気になるので空にしておく
-          (setq eltimer-timer-string "")
-          (setq global-mode-string (remove 'eltimer-timer-string global-mode-string))
+          (setq eltimer--timer-string "")
+          (setq global-mode-string (remove 'eltimer--timer-string global-mode-string))
           (beep))
-      (setq eltimer-timer-string
-            (format " [%s]" (eltimer-number-to-time-format duration-seconds))))
+      (setq eltimer--timer-string
+            (format " [%s]" (eltimer--number-to-time-format duration-seconds))))
     (force-mode-line-update t)))
 
-(defun eltimer-set-mode-line ()
+(defun eltimer--set-mode-line ()
   "Set a timer variables to mode line."
-  (add-to-list 'global-mode-string 'eltimer-timer-string t))
+  (add-to-list 'global-mode-string 'eltimer--timer-string t))
 
 ;;;###autoload
 (defun eltimer-timer-stop ()
@@ -89,22 +89,22 @@
 Cleanup happens on the next timer tick (within 1 second)."
   (interactive)
   ;; 目標時間を過去にすることで、run-at-time で定期的に呼び出されている
-  ;; eltimer-timer-update が次回呼び出し時に終了処理に移る
-  (setq eltimer-timer-goal-unix-time 0))
+  ;; eltimer--timer-update が次回呼び出し時に終了処理に移る
+  (setq eltimer--timer-goal-unix-time 0))
 
 ;;;###autoload
 (defun eltimer-timer-start ()
   "Start eltimer."
   (interactive)
   ;; タイマーが二重起動しないようにキャンセルする
-  (when eltimer-timer-object
-    (cancel-timer eltimer-timer-object))
-  (eltimer-set-mode-line)
-  (setq eltimer-timer-goal-unix-time
-        (+ (eltimer-time-to-seconds (eltimer-parse-string (eltimer-prompt)))
-           (eltimer-current-unix-time)))
-  (setq eltimer-timer-object
-        (run-at-time 0 1 #'eltimer-timer-update)))
+  (when eltimer--timer-object
+    (cancel-timer eltimer--timer-object))
+  (eltimer--set-mode-line)
+  (setq eltimer--timer-goal-unix-time
+        (+ (eltimer--time-to-seconds (eltimer--parse-string (eltimer--prompt)))
+           (eltimer--current-unix-time)))
+  (setq eltimer--timer-object
+        (run-at-time 0 1 #'eltimer--timer-update)))
 
 (provide 'eltimer)
 ;;; eltimer.el ends here
